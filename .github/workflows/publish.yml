@@ -9,14 +9,9 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+#            - name: Checkout code
+#              uses: actions/checkout@v4
 
-            - name: Extract image metadata
-              id: meta
-              uses: docker/metadata-action@v5
-              with:
-                images:${{ secrets.DOCKER_USERNAME }}/helloworld
 
             - name: Dockerhub auth
               uses: docker/login-action@v3
@@ -25,8 +20,8 @@ jobs:
                 password: ${{ secrets.DOCKER_PASSWORD }}
 
             - name: Build and push Docker image
-              uses: docker/build-push-action@v6
+              uses: docker/build-push-action@v6.17
               with:
+                context: .
                 push: ${{ github.event_name != 'pull_request' }}
-                tags: ${{ steps.meta.outputs.annotations }}
               
