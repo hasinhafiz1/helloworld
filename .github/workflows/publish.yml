@@ -10,6 +10,7 @@ permissions:
 
 jobs:
     docker:
+        environment: test
         if: contains(github.event.head_commit.message, 'docker')
         runs-on: ubuntu-latest
 
@@ -55,7 +56,7 @@ jobs:
                 task-definition-arn:  ${{ secrets.ECS_TASK_DEFINITION_ARN }}
                 task-definition-family: helloworld-task 
                 #task-definition-revision: task-definition-revision
-                container-name: helloworld-container
+                container-name: helloworld-containers
                 image: hhafiz/app:latest
                 environment-variables: |
                   MY_SECRET=${{ secrets.MY_SECRET }}
