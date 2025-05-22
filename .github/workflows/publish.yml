@@ -60,7 +60,6 @@ jobs:
                 image: hhafiz/app:latest
                 environment-variables: |
                   MY_SECRET=${{ secrets.MY_SECRET }}
-                secrets: "SECRET_KEY=arn:aws:ssm:region:0123456789:parameter/secret"
 
             - name: Deploy to Amazon ECS service
               uses: aws-actions/amazon-ecs-deploy-task-definition@v2
