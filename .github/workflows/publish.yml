@@ -52,8 +52,8 @@ jobs:
               id: render-web-container
               uses: aws-actions/amazon-ecs-render-task-definition@v1
               with:
-                task-definition: ${{ secrets.ECS_TASK_DEFINITION_FAMILY }}
-                task-definition-arn:  ${{ secrets.ECS_TASK_DEFINITION_ARN }}
+                #task-definition: ${{ secrets.ECS_TASK_DEFINITION_FAMILY }}
+                #task-definition-arn:  ${{ secrets.ECS_TASK_DEFINITION_ARN }}
                 task-definition-family: helloworld-task 
                 #task-definition-revision: task-definition-revision
                 container-name: helloworld-containers
