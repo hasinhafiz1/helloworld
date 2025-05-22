@@ -1,0 +1,17 @@
+# Ignore node_modules (not needed if you're COPY-ing only server.js, but good habit)
+node_modules
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git-related
+.git
+.gitignore
+
+# Build artifacts (if applicable later)
+dist
+build

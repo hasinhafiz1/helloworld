@@ -7,5 +7,9 @@
   },
   "author": "hasin",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "http": "^0.0.1-security"
+  }
 }
