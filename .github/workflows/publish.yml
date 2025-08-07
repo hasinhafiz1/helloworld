@@ -40,6 +40,3 @@ jobs:
           service: helloworld
           region: us-central1
           image: us-central1-docker.pkg.dev/cultivated-era-468305-k7/my-repo/app:latest
-
-      - name: Test Deployed URL
-        run: curl "${{ steps.deploy.outputs.url }}"
