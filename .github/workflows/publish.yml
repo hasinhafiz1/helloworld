@@ -19,7 +19,7 @@ jobs:
           uses: 'google-github-actions/auth@v0.4.0'
           with:
             workload_identity_provider: 'projects/1005967015769/locations/global/workloadIdentityPools/github-pool-test/providers/github-provider'
-            service_account: 'github-actions@cultivated-era-468305-k7.iam.gserviceaccount.com'
+            service_account: 'ci-cd-sa@cultivated-era-468305-k7.iam.gserviceaccount.com'
         - id: 'deploy'
           uses: 'google-github-actions/deploy-cloudrun@v2'
           with:
