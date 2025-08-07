@@ -11,13 +11,12 @@ permissions:
 jobs:
     docker:
         runs-on: ubuntu-latest
-
-      steps:
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0.4.0'
-        with:
-          workload_identity_provider: 'projects/1005967015769/locations/global/workloadIdentityPools/github-actions/providers/my-provider'
-          service_account: 'github-actions@cultivated-era-468305-k7.iam.gserviceaccount.com'
+        steps:
+        - id: 'auth'
+          name: 'Authenticate to Google Cloud'
+          uses: 'google-github-actions/auth@v0.4.0'
+          with:
+            workload_identity_provider: 'projects/1005967015769/locations/global/workloadIdentityPools/github-actions/providers/my-provider'
+            service_account: 'github-actions@cultivated-era-468305-k7.iam.gserviceaccount.com'
 
             
