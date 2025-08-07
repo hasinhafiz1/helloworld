@@ -1,31 +1,45 @@
-name: Push to GCP Artifact Registry
+name: Build, Push to GCP Artifact Registry, Deploy to Cloud Run
 
 on:
-    push:
-        branches: ["gcp"]
+  push:
+    branches: ["gcp"]
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-    Deploy:
-        runs-on: ubuntu-latest
-        steps:
-        - uses: 'actions/checkout@v4'
+  deploy:
+    runs-on: ubuntu-latest
 
-        - id: 'auth'
-          name: 'Authenticate to Google Cloud'
-          uses: 'google-github-actions/auth@v2'
-          with:
-            workload_identity_provider: 'projects/1005967015769/locations/global/workloadIdentityPools/github-pool-test/providers/github-provider'
-            service_account: 'ci-cd-sa@cultivated-era-468305-k7.iam.gserviceaccount.com'
-        - id: 'deploy'
-          uses: 'google-github-actions/deploy-cloudrun@v2'
-          with:
-            service: 'helloworld'
-            image: 'hhafiz/app'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-        - name: 'Use output'
-          run: 'curl "${{ steps.deploy.outputs.url }}"'
-            
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/1005967015769/locations/global/workloadIdentityPools/github-pool-test/providers/github-provider'
+          service_account: 'ci-cd-sa@cultivated-era-468305-k7.iam.gserviceaccount.com'
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build and push Docker image to Artifact Registry
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: us-central1-docker.pkg.dev/cultivated-era-468305-k7/my-repo/app:latest
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: helloworld
+          region: us-central1
+          image: us-central1-docker.pkg.dev/cultivated-era-468305-k7/my-repo/app:latest
+
+      - name: Test Deployed URL
+        run: curl "${{ steps.deploy.outputs.url }}"
