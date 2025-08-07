@@ -1,8 +1,8 @@
-name: Build and push docker image to dockerhub
+name: Push to GCP Artifact Registry
 
 on:
     push:
-        branches: ["main"]
+        branches: ["gcp"]
 
 permissions:
   id-token: write
@@ -10,42 +10,14 @@ permissions:
 
 jobs:
     docker:
-        if: contains(github.event.head_commit.message, 'docker')
         runs-on: ubuntu-latest
 
-        steps:
-
-            - name: Dockerhub auth
-              uses: docker/login-action@v3
-              with:
-                username: ${{ secrets.DOCKER_USERNAME }}
-                password: ${{ secrets.DOCKER_PASSWORD }}
-
-            - name: Build and push Docker image
-              uses: docker/build-push-action@v6.17
-              with:
-                push: ${{ github.event_name != 'pull_request' }}
-                tags: hhafiz/app:latest
-
-
-            # - name: Deploy to EC2 Instance
-            #   uses: appleboy/ssh-action@v1.0.0
-            #   with:
-            #     host: ${{ secrets.EC2_HOST }}
-            #     username: ${{ secrets.EC2_USER }}
-            #     key: ${{ secrets.EC2_SSH_KEY }}
-            #     script: |
-            #       /home/ec2-user/scripts/run.sh
-
-            - name: Configure AWS Credentials via OIDC
-              uses: aws-actions/configure-aws-credentials@v4
-              with:
-                aws-region: ${{ secrets.AWS_REGION }}
-                role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-
-            - name: Deploy to Amazon ECS
-              run: |
-                aws ecs update-service --cluster ${{ secrets.ECS_CLUSTER }} --service ${{ secrets.ECS_SERVICE }} --force-new-deployment --region ${{ secrets.AWS_REGION }}
-
+      steps:
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0.4.0'
+        with:
+          workload_identity_provider: 'projects/1005967015769/locations/global/workloadIdentityPools/github-actions/providers/my-provider'
+          service_account: 'github-actions@cultivated-era-468305-k7.iam.gserviceaccount.com'
 
             
